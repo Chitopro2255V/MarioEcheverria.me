@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Echeverría - CS Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #39FF14;
+            --bg-black: #000000;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* --- Mobile Configuration: Disable custom cursor on touch devices --- */
+        @media (hover: none) and (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor-dot, .cursor-outline { display: none !important; }
+            #cursor-glow { display: none !important; }
+        }
+
+        /* --- 3D Moving Background Grid --- */
+        #bg-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            background: #000;
+            overflow: hidden;
+        }
+        .grid-3d {
+            position: absolute;
+            bottom: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(rgba(57, 255, 20, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.3) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 1.5s linear infinite;
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 80%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 80%);
+        }
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 40px; }
+        }
+
+        /* --- Cursor Background Glow --- */
+        #cursor-glow {
+            position: fixed;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(57, 255, 20, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background-color: var(--neon-green);
+            border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9999; pointer-events: none;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+        .cursor-outline {
+            width: 35px; height: 35px;
+            border: 2px solid var(--neon-green);
+            border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9998; pointer-events: none;
+            transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
+            opacity: 0.5;
+        }
+
+        /* Neon Utilities */
+        .neon-text {
+            color: var(--neon-green);
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.7), 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+        .card {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid #1a1a1a;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        .card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.2), 0 0 30px rgba(57, 255, 20, 0.1);
+            transform: translateY(-5px);
+        }
+        .neon-btn {
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            transition: all 0.3s ease;
+        }
+        .neon-btn:hover {
+            background-color: var(--neon-green);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+
+        /* Audio Toggle Button */
+        .audio-btn {
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            transition: all 0.3s ease;
+        }
+        .audio-btn:hover {
+            background-color: var(--neon-green);
+            color: black;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* Typing animation */
+        .typing-cursor::after {
+            content: '_';
+            animation: blink 1s infinite;
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- FALLOUT CRT SCREEN EFFECT --- */
+        .crt-screen {
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #1a1a1a;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .crt-screen::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+        @keyframes flicker { 0% { opacity: 0.9; } 50% { opacity: 0.8; } 100% { opacity: 0.9; } }
+
+        /* Decorative PNGs */
+        .fallout-decor {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 5px rgba(57, 255, 20, 0.4));
+        }
+
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="font-sans">
+    
+    <!-- Custom Cursor Elements -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-outline" id="cursorOutline"></div>
+    
+    <!-- 3D Background & Glow -->
+    <div id="bg-wrapper">
+        <div class="grid-3d"></div>
+    </div>
+    <div id="cursor-glow"></div>
+
+    <!-- Background Audio Element -->
+    <!-- INSTRUCTION: Change src="your-song.mp3" to your actual file path -->
+    <audio id="bg-music" loop>
+        <source src="./music/The_Ink_Spots_-_I_Don_t_Want_To_Set_The_World_On_Fire_(mp3.pm).mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- === NAVBAR === -->
+    <nav class="fixed top-0 w-full bg-black/60 backdrop-blur-md z-50 border-b border-gray-900">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <span class="font-mono text-lg font-bold neon-text">~ /mario</span>
+            <div class="flex items-center space-x-4 sm:space-x-8">
+                <a href="#projects" class="hidden sm:block nav-link font-mono text-sm">Projects</a>
+                <a href="#gallery" class="hidden sm:block nav-link font-mono text-sm">Gallery</a>
+                <a href="#journey" class="hidden sm:block nav-link font-mono text-sm">Journey</a>
+                <a href="#interests" class="hidden sm:block nav-link font-mono text-sm">Interests</a>
+                <a href="#contact" class="hidden sm:block nav-link font-mono text-sm">Contact</a>
+                <!-- Audio Toggle Button -->
+                <button id="audio-toggle" class="audio-btn px-3 py-1 rounded-full font-mono text-xs sm:text-sm">
+                    <span id="audio-text">AUDIO: OFF</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- === HERO SECTION === -->
+    <header class="pt-24 md:pt-32 pb-20 px-6 relative">
+        <!-- Fallout Decorative PNG 1: Pip-Boy (Hidden on mobile) -->
+        <img src="./pictures/3.png" alt="Pip-Boy" class="fallout-decor hidden lg:block" style="top: 150px; right: -50px; width: 300px; transform: rotate(-15deg);">
+
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 z-10 relative">
+            <!-- IMAGE 1: Professional Headshot -->
+            <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-[#39FF14] flex-shrink-0" style="box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);">
+                <img src="./pictures/Profile.jpeg" alt="Mario" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-3xl md:text-6xl font-bold mb-3">Mario Andrés <span class="neon-text">Echeverría</span></h1>
+                <p class="text-base md:text-lg font-mono mb-6 text-gray-400">
+                    &gt; Guatemalan | MOFA Scholar | Aspiring Computer Scientist
+                </p>
+                <div class="bg-black/80 border border-[#1a1a1a] rounded-lg p-4 font-mono text-xs md:text-sm text-left shadow-md backdrop-blur-sm">
+                    <div class="flex mb-3">
+                        <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                    </div>
+                    <p class="text-[#39FF14]">$ run mario_bio.sh</p>
+                    <p id="terminal-text" class="mt-2 text-gray-400 typing-cursor"></p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- === PROJECTS SECTION === -->
+    <section id="projects" class="py-20 px-6 border-t border-gray-900 relative">
+        <!-- Fallout Decorative PNG 2: Vault Boy pointing (Hidden on mobile) -->
+        <img src="./pictures/4.png" alt="Vault Boy" class="fallout-decor hidden lg:block" style="top: 40px; left: 10px; width: 180px; transform: rotate(10deg);">
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// Projects & <span class="neon-text">Experience</span></h2>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-10">
+                <!-- Project 1: Chess AI -->
+                <div class="card rounded-xl overflow-hidden reveal">
+                    <div class="h-40 md:h-48 bg-gray-900 overflow-hidden border-b border-gray-800">
+                        <img src="./pictures/chess.png" alt="Chess AI" class="w-full h-full object-cover opacity-80">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 font-mono">♟️ Chess Game with AI</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            Developed a fully functional chess game featuring an AI opponent. Implemented move validation, check/checkmate detection, and a minimax algorithm with alpha-beta pruning.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-mono bg-black border border-[#39FF14] text-[#39FF14] px-2 py-1 rounded">HTML</span>
+                            <span class="text-xs font-mono bg-black border border-[#39FF14] text-[#39FF14] px-2 py-1 rounded">JavaScript</span>
+                        </div>
+                        <a href="https://chitopro2255v.github.io/chess.io/" class="nav-link font-mono text-sm">&gt; View on GitHub</a>
+                    </div>
+                </div>
+                <!-- Project 2: Chatbot -->
+                <div class="card rounded-xl overflow-hidden reveal">
+                    <div class="h-40 md:h-48 bg-gray-900 overflow-hidden border-b border-gray-800">
+                        <img src="./pictures/chatbot.png" alt="Chatbot" class="w-full h-full object-cover opacity-80">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 font-mono">🤖 AI-Powered Chatbot</h3>
+                        <p class="text-gray-400 mb-4 text-sm">
+                            Built an interactive conversational agent integrating a third-party LLM API. Handled API key management, dynamic user interaction flows, and real-time JSON parsing.
+                        </p>
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-mono bg-black border border-[#39FF14] text-[#39FF14] px-2 py-1 rounded">HTML</span>
+                            <span class="text-xs font-mono bg-black border border-[#39FF14] text-[#39FF14] px-2 py-1 rounded">JavaScript</span>
+                        </div>
+                        <a href="https://chitopro2255v.github.io/webmodel/" class="nav-link font-mono text-sm">&gt; View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === PHOTO GALLERY SECTION === -->
+    <section id="gallery" class="py-20 px-6 border-t border-gray-900 relative">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// Moments in <span class="neon-text">Focus</span></h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo1.jpg" alt="Photo 1" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo2.jpg" alt="Photo 2" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo3.jpg" alt="Photo 3" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo4.jpg" alt="Photo 4" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo5.jpg" alt="Photo 5" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo6.jpeg" alt="Photo 6" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo7.jpg" alt="Photo 7" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo8.jpeg" alt="Photo 8" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+                <div class="card rounded-xl overflow-hidden aspect-square reveal"><img src="./pictures/Photo9.jpg" alt="Photo 9" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === NEW: ORIGIN / PAST SECTION === -->
+    <section id="journey" class="py-20 px-6 border-t border-gray-900 relative">
+        <div class="max-w-4xl mx-auto reveal">
+            <h2 class="text-2xl md:text-3xl font-mono font-bold mb-8 text-center">// Origin & <span class="neon-text">Journey</span></h2>
+            <div class="card p-8 md:p-12 rounded-xl font-mono text-sm md:text-base text-gray-400 leading-relaxed">
+                <p class="mb-4">
+                    <span class="neon-text font-bold">&gt; Root Directory:</span> Born in the town of Santa Cruz del Quiché, Guatemala. My parents raised me with a deep enthusiasm for exploration—we traveled constantly, turning the world into my classroom.
+                </p>
+                <p class="mb-4">
+                    <span class="neon-text font-bold">&gt; Discipline.exe:</span> Shaped by the rigorous environment of a Military Academy. I believe that being disciplined is key to achieve my goals. I like to have a balanced life, with a healthy style.
+                </p>
+                <p>
+                    <span class="neon-text font-bold">&gt; Current Objective:</span> Granted the MOFA Scholarship to study in Taiwan. I am now blending my cultural roots with relentless curiosity, aspiring to develop technology that connects and empowers communities globally.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- === BEYOND THE SCREEN SECTION (FALLOUT CRT STYLE) === -->
+    <section id="interests" class="py-20 px-6 border-t border-gray-900 relative">
+        <!-- Fallout Decorative PNG 3: Vault Sticker/Pattern (Hidden on mobile) -->
+        <img src="./pictures/2.png" alt="Vault Sticker" class="fallout-decor hidden lg:block" style="bottom: 50px; right: -30px; width: 200px; opacity: 0.4;">
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// Beyond the <span class="neon-text">Screen</span></h2>
+            <div class="grid md:grid-cols-3 gap-8 items-center">
+                
+                <!-- FALLOUT CRT GIF PLAYER -->
+                <div class="md:col-span-1 reveal">
+                    <div class="crt-screen aspect-square bg-black">
+                        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcm5waGc3c29pZjNwMGN3cmVzM29sNDBlZjA0aXhyaWNyOHIzbTNoaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1qk49rU5SCajPxHkrw/giphy.gif" alt="Retro Cartoon GIF" class="w-full h-full object-cover opacity-90" style="mix-blend-mode: screen; filter: hue-rotate(80deg) sepia(1) saturate(3);"> 
+                    </div>
+                    <p class="text-center mt-4 font-mono text-xs text-gray-500">&gt; ROBCO OS v1.0 // LOADING WASTELAND.EXE...</p>
+                </div>
+                
+                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                    <div class="card p-6 rounded-xl reveal">
+                        <h3 class="text-lg md:text-xl font-bold mb-2 font-mono neon-text">🎵 Musician</h3>
+                        <p class="text-sm text-gray-400">Used to play marimba in 8°-9° grade. Now I've been playing the guitar since 2023, and improving.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl reveal">
+                        <h3 class="text-lg md:text-xl font-bold mb-2 font-mono neon-text">💪 Discipline</h3>
+                        <p class="text-sm text-gray-400">A dedicated gym-goer to balance mental load. Keeps me disciplined, focused, and energized.I also like to do hiking or do long walks around the places I visit.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl reveal">
+                        <h3 class="text-lg md:text-xl font-bold mb-2 font-mono neon-text">✈️ Traveling</h3>
+                        <p class="text-sm text-gray-400">Inherited from my parents. We traveled constantly, turning the world into my classroom. Besides, I like to do scuba diving, I've completed 16 immersions for a cumulative dive time of 10 hours and 30 minutes, so far.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl reveal">
+                        <h3 class="text-lg md:text-xl font-bold mb-2 font-mono neon-text">🎮 Video Games</h3>
+                        <p class="text-sm text-gray-400">Not just for fun—they sharpen my strategic thinking and problem-solving skills. As you can see, some of my favorite games are Fallout and Fortnite.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === CONTACT SECTION === -->
+    <footer id="contact" class="py-20 px-6 border-t border-gray-900 relative">
+        <!-- Fallout Decorative PNG 4: Hand/Human (Hidden on mobile) -->
+        <img src="./pictures/1.png" alt="Fallout Hand" class="fallout-decor hidden lg:block" style="bottom: 20px; left: 20px; width: 150px; opacity: 0.8;">
+
+        <div class="max-w-6xl mx-auto text-center reveal relative z-10">
+            <h2 class="text-2xl md:text-3xl font-mono font-bold mb-4">// Let's <span class="neon-text">Connect</span></h2>
+            <p class="text-gray-400 mb-8 font-mono text-sm md:text-base">I'm always open to discussing tech, chess, or music.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" onclick="copyEmail(event)" class="neon-btn px-6 py-3 rounded-lg font-mono text-sm">Email Me</a>
+                <a href="https://github.com/Chitopro2255V" target="_blank" class="neon-btn px-6 py-3 rounded-lg font-mono text-sm">GitHub</a>
+                <a href="https://www.linkedin.com/in/mario-andres-echeverria-munoz-120099424/" target="_blank" class="neon-btn px-6 py-3 rounded-lg font-mono text-sm">LinkedIn</a>
+            </div>
+            <p class="mt-12 text-xs text-gray-600 font-mono">© 2026 Mario Andrés Echeverría Muñoz. System compiled successfully.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Background Music Logic ---
+        const audio = document.getElementById('bg-music');
+        const audioBtn = document.getElementById('audio-toggle');
+        const audioText = document.getElementById('audio-text');
+        
+        audio.volume = 0.03; // Set to 10% volume
+
+        audioBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                audioText.innerText = "AUDIO: ON";
+            } else {
+                audio.pause();
+                audioText.innerText = "AUDIO: OFF";
+            }
+        });
+
+        // Custom Cursor Logic
+        const dot = document.getElementById('cursorDot');
+        const outline = document.getElementById('cursorOutline');
+        const glow = document.getElementById('cursor-glow');
+
+        document.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            setTimeout(() => {
+                outline.style.left = e.clientX + 'px';
+                outline.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        document.querySelectorAll('a, button, .card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                outline.style.width = '50px'; outline.style.height = '50px';
+                outline.style.opacity = '1'; dot.style.backgroundColor = '#000';
+            });
+            el.addEventListener('mouseleave', () => {
+                outline.style.width = '35px'; outline.style.height = '35px';
+                outline.style.opacity = '0.5'; dot.style.backgroundColor = '#39FF14';
+            });
+        });
+
+        // Terminal Typing Effect
+        const text = `Born in Santa Cruz del Quiché, Guatemala on June 16, 2008. MOFA Scholar in Taiwan.\nDeep interest for Computer Science and AI, since I got my first computer.\nLife based on discipline with relentless curiosity.\nMission: Develop tech that empowers communities globally.\nHobbies: Guitar, Chess, Traveling, Gym, Scuba Diving, Video Games.\nStrengths: Discipline, Responsibility, Punctuality, Leadership, Adaptability and Reliability. `;
+        const terminalEl = document.getElementById('terminal-text');
+        let index = 0;
+        function typeText() {
+            if (index < text.length) {
+                terminalEl.innerHTML = text.slice(0, index).replace(/\n/g, '<br>') + '<span class="typing-cursor"></span>';
+                index++;
+                setTimeout(typeText, 40);
+            }
+        }
+        setTimeout(typeText, 1000);
+
+        // Scroll Reveal Animation
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        reveals.forEach(reveal => {
+            revealObserver.observe(reveal);
+        });
+
+        // MAIL ME FUNCTION
+        function copyEmail(event) {
+            event.preventDefault(); // Stops the page from jumping
+            const email = "chitoecheverria11@gmail.com"; // Put your email here
+  
+            navigator.clipboard.writeText(email).then(() => {
+              alert("Email address copied to clipboard!");
+            }).catch(err => {
+              console.error("Failed to copy: ", err);
+            });
+        }
+    </script>
+</body>
+</html>
