@@ -20,6 +20,11 @@
             overflow-x: hidden;
         }
 
+        /* --- FIX: Offset anchor links so they don't hide behind the fixed navbar --- */
+        section[id] {
+            scroll-margin-top: 120px;
+        }
+
         /* --- Intro Screen --- */
         #intro-screen {
             position: fixed;
@@ -291,7 +296,7 @@
                     
                     <a href="#interests" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ INTERESTS ]</a>
                     <div class="flex justify-center">
-                        <img src="./pictures/3.png" alt="Pip-Boy" class="w-28 sm:w-36" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
+                        <img src="./pictures/pipboy.png" alt="Pip-Boy" class="w-28 sm:w-36" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
                     </div>
                     <a href="#contact" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ CONTACT ]</a>
                     
