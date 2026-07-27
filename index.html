@@ -20,6 +20,42 @@
             overflow-x: hidden;
         }
 
+        /* --- Intro Screen --- */
+        #intro-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 1s ease-out, visibility 1s;
+        }
+        #intro-screen.hidden-intro {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #intro-gif {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+        .intro-text {
+            position: relative;
+            z-index: 2;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--neon-green);
+            font-size: 2rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px var(--neon-green);
+            animation: blink 1.5s infinite;
+        }
+
         /* --- Mobile Configuration: Disable custom cursor on touch devices --- */
         @media (hover: none) and (pointer: coarse) {
             body { cursor: auto; }
@@ -118,17 +154,39 @@
             color: var(--neon-green);
             text-shadow: 0 0 8px var(--neon-green);
         }
+        .pipboy-link { transition: all 0.3s ease; }
+        .pipboy-link:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 12px var(--neon-green);
+        }
 
         /* Audio Toggle Button */
         .audio-btn {
             border: 1px solid var(--neon-green);
             color: var(--neon-green);
             transition: all 0.3s ease;
+            background: rgba(57, 255, 20, 0.1);
         }
         .audio-btn:hover {
             background-color: var(--neon-green);
             color: black;
             box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* S.P.E.C.I.A.L Bars */
+        .stat-bar {
+            height: 6px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .stat-fill {
+            height: 100%;
+            background: var(--neon-green);
+            box-shadow: 0 0 8px var(--neon-green);
+            width: 0;
+            transition: width 1.5s ease-out;
         }
 
         /* Typing animation */
@@ -185,7 +243,13 @@
     </style>
 </head>
 <body class="font-sans">
-    
+
+    <!-- === INTRO SCREEN === -->
+    <div id="intro-screen">
+        <img id="intro-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2tseGFrODV1M2UxeTZmOHR3bHFyNWM0OTgwcjU5cmU4MW10dnQ1eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ma9VRHXSFmJZC/giphy.gif" alt="Please Stand By">
+        <div class="intro-text">CLICK TO ENTER</div>
+    </div>
+
     <!-- Custom Cursor Elements -->
     <div class="cursor-dot" id="cursorDot"></div>
     <div class="cursor-outline" id="cursorOutline"></div>
@@ -197,7 +261,6 @@
     <div id="cursor-glow"></div>
 
     <!-- Background Audio Element -->
-    <!-- INSTRUCTION: Change src="your-song.mp3" to your actual file path -->
     <audio id="bg-music" loop>
         <source src="./music/The_Ink_Spots_-_I_Don_t_Want_To_Set_The_World_On_Fire_(mp3.pm).mp3" type="audio/mpeg">
     </audio>
@@ -206,27 +269,45 @@
     <nav class="fixed top-0 w-full bg-black/60 backdrop-blur-md z-50 border-b border-gray-900">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <span class="font-mono text-lg font-bold neon-text">~ /mario</span>
-            <div class="flex items-center space-x-4 sm:space-x-8">
-                <a href="#projects" class="hidden sm:block nav-link font-mono text-sm">Projects</a>
-                <a href="#gallery" class="hidden sm:block nav-link font-mono text-sm">Gallery</a>
-                <a href="#journey" class="hidden sm:block nav-link font-mono text-sm">Journey</a>
-                <a href="#interests" class="hidden sm:block nav-link font-mono text-sm">Interests</a>
-                <a href="#contact" class="hidden sm:block nav-link font-mono text-sm">Contact</a>
-                <!-- Audio Toggle Button -->
-                <button id="audio-toggle" class="audio-btn px-3 py-1 rounded-full font-mono text-xs sm:text-sm">
-                    <span id="audio-text">AUDIO: OFF</span>
-                </button>
+            <button id="audio-toggle" class="audio-btn px-3 py-1 rounded-full font-mono text-xs sm:text-sm">
+                <span id="audio-text">AUDIO: OFF</span>
+            </button>
+        </div>
+        
+        <!-- Down Arrow Toggle -->
+        <div class="flex justify-center pb-2">
+            <button id="pipboy-toggle" class="text-[#39FF14] hover:scale-110 transition-transform">
+                <svg id="arrow-down" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s ease; filter: drop-shadow(0 0 5px #39FF14);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+        </div>
+        
+        <!-- Expandable Pip-Boy Menu -->
+        <div id="pipboy-menu" class="overflow-hidden transition-all duration-500 max-h-0 opacity-0 bg-black/95 border-t border-[#39FF14]/30">
+            <div class="max-w-2xl mx-auto py-12 px-6">
+                <div class="grid grid-cols-3 gap-8 items-center text-center font-mono">
+                    <a href="#projects" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ PROJECTS ]</a>
+                    <a href="#gallery" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ GALLERY ]</a>
+                    <a href="#journey" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ JOURNEY ]</a>
+                    
+                    <a href="#interests" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ INTERESTS ]</a>
+                    <div class="flex justify-center">
+                        <img src="./pictures/3.png" alt="Pip-Boy" class="w-28 sm:w-36" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
+                    </div>
+                    <a href="#contact" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ CONTACT ]</a>
+                    
+                    <div></div>
+                    <a href="#special" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ S.P.E.C.I.A.L ]</a>
+                    <div></div>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- === HERO SECTION === -->
-    <header class="pt-24 md:pt-32 pb-20 px-6 relative">
-        <!-- Fallout Decorative PNG 1: Pip-Boy (Hidden on mobile) -->
+    <header class="pt-32 md:pt-40 pb-20 px-6 relative">
         <img src="./pictures/3.png" alt="Pip-Boy" class="fallout-decor hidden lg:block" style="top: 150px; right: -50px; width: 300px; transform: rotate(-15deg);">
 
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 z-10 relative">
-            <!-- IMAGE 1: Professional Headshot -->
             <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-[#39FF14] flex-shrink-0" style="box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);">
                 <img src="./pictures/Profile.jpeg" alt="Mario" class="w-full h-full object-cover">
             </div>
@@ -248,15 +329,96 @@
         </div>
     </header>
 
+    <!-- === S.P.E.C.I.A.L. SECTION === -->
+    <section id="special" class="py-20 px-6 border-t border-gray-900 relative">
+        <div class="max-w-6xl mx-auto relative z-10">
+            <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// S.P.E.C.I.A.L. <span class="neon-text">Attributes</span></h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Strength -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">S</h3>
+                        <span class="font-mono text-2xl neon-text">08</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">STRENGTH</p>
+                    <p class="text-sm text-gray-400 mb-2">Forged in the Military Academy. A dedicated gym-goer, physically and mentally prepared for long debugging sessions.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="80%"></div></div>
+                </div>
+                <!-- Perception -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">P</h3>
+                        <span class="font-mono text-2xl neon-text">09</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">PERCEPTION</p>
+                    <p class="text-sm text-gray-400 mb-2">World traveler. Keen eye for finding bugs, optimizing code, and appreciating diverse cultures globally.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="90%"></div></div>
+                </div>
+                <!-- Endurance -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">E</h3>
+                        <span class="font-mono text-2xl neon-text">08</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">ENDURANCE</p>
+                    <p class="text-sm text-gray-400 mb-2">Relentless curiosity. Can grind through complex algorithmic problems, like implementing minimax with alpha-beta pruning.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="80%"></div></div>
+                </div>
+                <!-- Charisma -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">C</h3>
+                        <span class="font-mono text-2xl neon-text">07</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">CHARISMA</p>
+                    <p class="text-sm text-gray-400 mb-2">Musician at heart. Rhythm of the marimba and acoustic guitar translates into building tech that empowers communities.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="70%"></div></div>
+                </div>
+                <!-- Intelligence -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">I</h3>
+                        <span class="font-mono text-2xl neon-text">10</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">INTELLIGENCE</p>
+                    <p class="text-sm text-gray-400 mb-2">Aspiring Computer Scientist. Ignited passion building HTML sites, now developing AI chatbots and chess engines.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="100%"></div></div>
+                </div>
+                <!-- Agility -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">A</h3>
+                        <span class="font-mono text-2xl neon-text">08</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">AGILITY</p>
+                    <p class="text-sm text-gray-400 mb-2">Quick learner. Adapted to life in Taiwan under the MOFA Scholarship, mastering Python, HTML, and JS integrations rapidly.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="80%"></div></div>
+                </div>
+                <!-- Luck -->
+                <div class="card p-6 rounded-xl reveal">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-2xl font-mono font-bold neon-text">L</h3>
+                        <span class="font-mono text-2xl neon-text">09</span>
+                    </div>
+                    <p class="font-mono text-xs text-gray-500 mb-2">LUCK</p>
+                    <p class="text-sm text-gray-400 mb-2">Born in Guatemala, raised to explore. Granted the MOFA Scholarship—fortune favors the bold and the curious.</p>
+                    <div class="stat-bar"><div class="stat-fill" data-width="90%"></div></div>
+                </div>
+                <!-- Vault Boy -->
+                <div class="hidden lg:flex items-center justify-center reveal">
+                    <img src="./pictures/4.png" alt="Vault Boy" class="w-48 opacity-90" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- === PROJECTS SECTION === -->
     <section id="projects" class="py-20 px-6 border-t border-gray-900 relative">
-        <!-- Fallout Decorative PNG 2: Vault Boy pointing (Hidden on mobile) -->
         <img src="./pictures/4.png" alt="Vault Boy" class="fallout-decor hidden lg:block" style="top: 40px; left: 10px; width: 180px; transform: rotate(10deg);">
 
         <div class="max-w-6xl mx-auto relative z-10">
             <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// Projects & <span class="neon-text">Experience</span></h2>
             <div class="grid md:grid-cols-2 gap-8 md:gap-10">
-                <!-- Project 1: Chess AI -->
                 <div class="card rounded-xl overflow-hidden reveal">
                     <div class="h-40 md:h-48 bg-gray-900 overflow-hidden border-b border-gray-800">
                         <img src="./pictures/chess.png" alt="Chess AI" class="w-full h-full object-cover opacity-80">
@@ -273,7 +435,6 @@
                         <a href="https://chitopro2255v.github.io/chess.io/" class="nav-link font-mono text-sm">&gt; View on GitHub</a>
                     </div>
                 </div>
-                <!-- Project 2: Chatbot -->
                 <div class="card rounded-xl overflow-hidden reveal">
                     <div class="h-40 md:h-48 bg-gray-900 overflow-hidden border-b border-gray-800">
                         <img src="./pictures/chatbot.png" alt="Chatbot" class="w-full h-full object-cover opacity-80">
@@ -332,14 +493,11 @@
 
     <!-- === BEYOND THE SCREEN SECTION (FALLOUT CRT STYLE) === -->
     <section id="interests" class="py-20 px-6 border-t border-gray-900 relative">
-        <!-- Fallout Decorative PNG 3: Vault Sticker/Pattern (Hidden on mobile) -->
         <img src="./pictures/2.png" alt="Vault Sticker" class="fallout-decor hidden lg:block" style="bottom: 50px; right: -30px; width: 200px; opacity: 0.4;">
 
         <div class="max-w-6xl mx-auto relative z-10">
             <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// Beyond the <span class="neon-text">Screen</span></h2>
             <div class="grid md:grid-cols-3 gap-8 items-center">
-                
-                <!-- FALLOUT CRT GIF PLAYER -->
                 <div class="md:col-span-1 reveal">
                     <div class="crt-screen aspect-square bg-black">
                         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcm5waGc3c29pZjNwMGN3cmVzM29sNDBlZjA0aXhyaWNyOHIzbTNoaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1qk49rU5SCajPxHkrw/giphy.gif" alt="Retro Cartoon GIF" class="w-full h-full object-cover opacity-90" style="mix-blend-mode: screen; filter: hue-rotate(80deg) sepia(1) saturate(3);"> 
@@ -371,7 +529,6 @@
 
     <!-- === CONTACT SECTION === -->
     <footer id="contact" class="py-20 px-6 border-t border-gray-900 relative">
-        <!-- Fallout Decorative PNG 4: Hand/Human (Hidden on mobile) -->
         <img src="./pictures/1.png" alt="Fallout Hand" class="fallout-decor hidden lg:block" style="bottom: 20px; left: 20px; width: 150px; opacity: 0.8;">
 
         <div class="max-w-6xl mx-auto text-center reveal relative z-10">
@@ -387,14 +544,30 @@
     </footer>
 
     <script>
-        // --- Background Music Logic ---
+        // --- Intro Screen & Audio Logic ---
+        const introScreen = document.getElementById('intro-screen');
         const audio = document.getElementById('bg-music');
         const audioBtn = document.getElementById('audio-toggle');
         const audioText = document.getElementById('audio-text');
-        
-        audio.volume = 0.03; // Set to 10% volume
+        let gameStarted = false;
 
-        audioBtn.addEventListener('click', () => {
+        audio.volume = 0.03; // Set to 3% volume
+
+        function startSite() {
+            if (!gameStarted) {
+                introScreen.classList.add('hidden-intro');
+                audio.play();
+                audioText.innerText = "AUDIO: ON";
+                gameStarted = true;
+            }
+        }
+
+        // Click intro to start
+        introScreen.addEventListener('click', startSite);
+
+        // Manual audio toggle button
+        audioBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
             if (audio.paused) {
                 audio.play();
                 audioText.innerText = "AUDIO: ON";
@@ -404,7 +577,36 @@
             }
         });
 
-        // Custom Cursor Logic
+        // --- Expandable Pip-Boy Menu Logic ---
+        const pipToggle = document.getElementById('pipboy-toggle');
+        const pipMenu = document.getElementById('pipboy-menu');
+        const arrow = document.getElementById('arrow-down');
+        let menuOpen = false;
+
+        pipToggle.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                pipMenu.style.maxHeight = '500px'; // Expand
+                pipMenu.style.opacity = '1';
+                arrow.style.transform = 'rotate(180deg)'; // Arrow points up
+            } else {
+                pipMenu.style.maxHeight = '0'; // Collapse
+                pipMenu.style.opacity = '0';
+                arrow.style.transform = 'rotate(0deg)'; // Arrow points down
+            }
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.pipboy-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOpen = false;
+                pipMenu.style.maxHeight = '0';
+                pipMenu.style.opacity = '0';
+                arrow.style.transform = 'rotate(0deg)';
+            });
+        });
+
+        // --- Custom Cursor Logic ---
         const dot = document.getElementById('cursorDot');
         const outline = document.getElementById('cursorOutline');
         const glow = document.getElementById('cursor-glow');
@@ -431,7 +633,7 @@
             });
         });
 
-        // Terminal Typing Effect
+        // --- Terminal Typing Effect ---
         const text = `Born in Santa Cruz del Quiché, Guatemala on June 16, 2008. MOFA Scholar in Taiwan.\nDeep interest for Computer Science and AI, since I got my first computer.\nLife based on discipline with relentless curiosity.\nMission: Develop tech that empowers communities globally.\nHobbies: Guitar, Chess, Traveling, Gym, Scuba Diving, Video Games.\nStrengths: Discipline, Responsibility, Punctuality, Leadership, Adaptability and Reliability. `;
         const terminalEl = document.getElementById('terminal-text');
         let index = 0;
@@ -444,12 +646,18 @@
         }
         setTimeout(typeText, 1000);
 
-        // Scroll Reveal Animation
+        // --- Scroll Reveal Animation & S.P.E.C.I.A.L. Bars ---
         const reveals = document.querySelectorAll('.reveal');
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    
+                    // Animate SPECIAL stat bars if they exist in the revealed element
+                    const statFills = entry.target.querySelectorAll('.stat-fill');
+                    statFills.forEach(fill => {
+                        fill.style.width = fill.getAttribute('data-width');
+                    });
                 }
             });
         }, { threshold: 0.15 });
@@ -458,7 +666,7 @@
             revealObserver.observe(reveal);
         });
 
-        // MAIL ME FUNCTION
+        // --- MAIL ME FUNCTION ---
         function copyEmail(event) {
             event.preventDefault(); // Stops the page from jumping
             const email = "chitoecheverria11@gmail.com"; // Put your email here
