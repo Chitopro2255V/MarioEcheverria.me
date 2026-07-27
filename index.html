@@ -194,6 +194,23 @@
             transition: width 1.5s ease-out;
         }
 
+        /* S.P.E.C.I.A.L Image Space */
+        .special-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(57, 255, 20, 0.4);
+            background: #000;
+            flex-shrink: 0;
+        }
+        .special-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
         /* Typing animation */
         .typing-cursor::after {
             content: '_';
@@ -296,7 +313,7 @@
                     
                     <a href="#interests" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ INTERESTS ]</a>
                     <div class="flex justify-center">
-                        <img src="./pictures/pipboy.png" alt="Pip-Boy" class="w-28 sm:w-36" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
+                        <img src="./pictures/3.png" alt="Pip-Boy" class="w-28 sm:w-36" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
                     </div>
                     <a href="#contact" class="pipboy-link neon-text text-sm sm:text-lg tracking-wider">[ CONTACT ]</a>
                     
@@ -339,77 +356,141 @@
         <div class="max-w-6xl mx-auto relative z-10">
             <h2 class="text-2xl md:text-3xl font-mono font-bold mb-12 text-center reveal">// S.P.E.C.I.A.L. <span class="neon-text">Attributes</span></h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
                 <!-- Strength -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">S</h3>
-                        <span class="font-mono text-2xl neon-text">08</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">S</h3>
+                            <p class="font-mono text-xs text-gray-500">STRENGTH</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">08</span>
+                            <!-- IMAGE SPACE: Change src to your local image -->
+                            <div class="special-img">
+                                <img src="./pictures/special_strength.png" alt="Strength">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">STRENGTH</p>
                     <p class="text-sm text-gray-400 mb-2">Forged in the Military Academy. A dedicated gym-goer, physically and mentally prepared for long debugging sessions.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="80%"></div></div>
                 </div>
+
                 <!-- Perception -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">P</h3>
-                        <span class="font-mono text-2xl neon-text">09</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">P</h3>
+                            <p class="font-mono text-xs text-gray-500">PERCEPTION</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">09</span>
+                            <!-- IMAGE SPACE -->
+                            <div class="special-img">
+                                <img src="./pictures/special_perception.png" alt="Perception">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">PERCEPTION</p>
                     <p class="text-sm text-gray-400 mb-2">World traveler. Keen eye for finding bugs, optimizing code, and appreciating diverse cultures globally.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="90%"></div></div>
                 </div>
+
                 <!-- Endurance -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">E</h3>
-                        <span class="font-mono text-2xl neon-text">08</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">E</h3>
+                            <p class="font-mono text-xs text-gray-500">ENDURANCE</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">08</span>
+                            <!-- IMAGE SPACE -->
+                            <div class="special-img">
+                                <img src="./pictures/special_endurance.png" alt="Endurance">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">ENDURANCE</p>
                     <p class="text-sm text-gray-400 mb-2">Relentless curiosity. Can grind through complex algorithmic problems, like implementing minimax with alpha-beta pruning.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="80%"></div></div>
                 </div>
+
                 <!-- Charisma -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">C</h3>
-                        <span class="font-mono text-2xl neon-text">07</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">C</h3>
+                            <p class="font-mono text-xs text-gray-500">CHARISMA</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">07</span>
+                            <!-- IMAGE SPACE -->
+                            <div class="special-img">
+                                <img src="./pictures/special_charisma.png" alt="Charisma">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">CHARISMA</p>
                     <p class="text-sm text-gray-400 mb-2">Musician at heart. Rhythm of the marimba and acoustic guitar translates into building tech that empowers communities.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="70%"></div></div>
                 </div>
+
                 <!-- Intelligence -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">I</h3>
-                        <span class="font-mono text-2xl neon-text">10</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">I</h3>
+                            <p class="font-mono text-xs text-gray-500">INTELLIGENCE</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">10</span>
+                            <!-- IMAGE SPACE -->
+                            <div class="special-img">
+                                <img src="./pictures/special_intelligence.png" alt="Intelligence">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">INTELLIGENCE</p>
                     <p class="text-sm text-gray-400 mb-2">Aspiring Computer Scientist. Ignited passion building HTML sites, now developing AI chatbots and chess engines.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="100%"></div></div>
                 </div>
+
                 <!-- Agility -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">A</h3>
-                        <span class="font-mono text-2xl neon-text">08</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">A</h3>
+                            <p class="font-mono text-xs text-gray-500">AGILITY</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">08</span>
+                            <!-- IMAGE SPACE -->
+                            <div class="special-img">
+                                <img src="./pictures/special_agility.png" alt="Agility">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">AGILITY</p>
                     <p class="text-sm text-gray-400 mb-2">Quick learner. Adapted to life in Taiwan under the MOFA Scholarship, mastering Python, HTML, and JS integrations rapidly.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="80%"></div></div>
                 </div>
+
                 <!-- Luck -->
                 <div class="card p-6 rounded-xl reveal">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="text-2xl font-mono font-bold neon-text">L</h3>
-                        <span class="font-mono text-2xl neon-text">09</span>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-3xl font-mono font-bold neon-text">L</h3>
+                            <p class="font-mono text-xs text-gray-500">LUCK</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <span class="font-mono text-2xl neon-text">09</span>
+                            <!-- IMAGE SPACE -->
+                            <div class="special-img">
+                                <img src="./pictures/special_luck.png" alt="Luck">
+                            </div>
+                        </div>
                     </div>
-                    <p class="font-mono text-xs text-gray-500 mb-2">LUCK</p>
                     <p class="text-sm text-gray-400 mb-2">Born in Guatemala, raised to explore. Granted the MOFA Scholarship—fortune favors the bold and the curious.</p>
                     <div class="stat-bar"><div class="stat-fill" data-width="90%"></div></div>
                 </div>
-                <!-- Vault Boy -->
+
+                <!-- Vault Boy Decor -->
                 <div class="hidden lg:flex items-center justify-center reveal">
                     <img src="./pictures/4.png" alt="Vault Boy" class="w-48 opacity-90" style="filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6));">
                 </div>
